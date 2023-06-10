@@ -551,4 +551,5 @@ source ~/.oh-my-posh.nu
 source ~/nu_scripts/custom-completions/git/git-completions.nu
 source ~/nu_scripts/custom-completions/poetry/poetry-completions.nu
 source ~/nu_scripts/custom-completions/make/make-completions.nu
+source ~/nu/local-config.nu
 # source /home/daniel/.config/broot/launcher/nushell/br
