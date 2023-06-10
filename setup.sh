@@ -6,7 +6,7 @@ bootstrap() {
 }
 
 has_nu_scripts() {
-    if [ -d "$HOME/.nu_scripts" ]; then
+    if [ -d "$HOME/nu_scripts" ]; then
         return 0
     else
         return 1
@@ -14,7 +14,7 @@ has_nu_scripts() {
 }
 
 install_nu_scripts() {
-    git clone github.com:nu/nu_scripts.git "$HOME/.nu_scripts"
+    git clone git@github.com:nushell/nu_scripts.git "$HOME/nu_scripts"
 }
 
 bootstrap
