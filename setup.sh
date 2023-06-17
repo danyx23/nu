@@ -6,6 +6,19 @@ bootstrap() {
     has_env_file_link || link_env_file
     has_config_file_link || link_config_file
     has_oh_my_posh || install_oh_my_posh
+    has_local-config || create_empty_local_config
+}
+
+has_local-config() {
+    if [ -f "$HOME/nu/local-config.nu" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+create_empty_local_config() {
+    touch "$HOME/nu/local-config.nu"
 }
 
 has_oh_my_posh() {
