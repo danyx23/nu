@@ -5,6 +5,19 @@ bootstrap() {
     has_nu_scripts || install_nu_scripts
     has_env_file_link || link_env_file
     has_config_file_link || link_config_file
+    has_oh_my_posh || install_oh_my_posh
+}
+
+has_oh_my_posh() {
+    if [ -f "$HOME/.local/bin/oh-my-posh" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_oh_my_posh() {
+    curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/.local/bin
 }
 
 has_config_file_link() {

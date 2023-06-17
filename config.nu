@@ -545,7 +545,7 @@ let-env config = {
   ]
 }
 
-source ~/.oh-my-posh.nu
+source ~/nu/.oh-my-posh.nu
 # alias z = zoxide
 # source ~/.zoxide.nu
 source ~/nu_scripts/custom-completions/git/git-completions.nu
