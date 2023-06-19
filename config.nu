@@ -545,11 +545,10 @@ let-env config = {
   ]
 }
 
-source ~/nu/.oh-my-posh.nu
-# alias z = zoxide
-# source ~/.zoxide.nu
+source ~/nu/aux/.oh-my-posh.nu
 source ~/nu_scripts/custom-completions/git/git-completions.nu
 source ~/nu_scripts/custom-completions/poetry/poetry-completions.nu
 source ~/nu_scripts/custom-completions/make/make-completions.nu
 source ~/nu/local-config.nu
-# source /home/daniel/.config/broot/launcher/nushell/br
+source ~/.zoxide.nu
+source ~/nu/aux/broot.nu

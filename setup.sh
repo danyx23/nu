@@ -2,11 +2,125 @@
 set -e
 
 bootstrap() {
+    if test -x "$(which fzf)"
+    then
+        echo "fzf is installed"
+    else
+        echo "fzf is not installed - please apt-get install it"
+    fi
     has_nu_scripts || install_nu_scripts
     has_env_file_link || link_env_file
     has_config_file_link || link_config_file
     has_oh_my_posh || install_oh_my_posh
     has_local-config || create_empty_local_config
+    has_zellij || install_zellij
+    has_broot || install_broot
+    has_bat || install_bat
+    has_nu || install_nu
+    has_zoxide || install_zoxide
+    has_ripgrep || install_ripgrep
+}
+
+has_ripgrep() {
+    if [ -f "$HOME/.local/bin/rg" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_ripgrep() {
+    echo "==> Installing ripgrep"
+    version="13.0.0"
+    wget "https://github.com/BurntSushi/ripgrep/releases/download/$version/ripgrep-$version-x86_64-unknown-linux-musl.tar.gz"
+    tar -xvf ripgrep-$version-x86_64-unknown-linux-musl.tar.gz
+    mv ripgrep-$version-x86_64-unknown-linux-musl/rg ~/.local/bin
+    rm -rf ripgrep-$version-x86_64-unknown-linux-musl
+    rm ripgrep-$version-x86_64-unknown-linux-musl.tar.gz
+}
+
+has_zoxide() {
+    if [ -f "$HOME/.local/bin/zoxide" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_zoxide() {
+    echo "==> Installing zoxide"
+    version="0.9.1"
+    wget https://github.com/ajeetdsouza/zoxide/releases/download/v$version/zoxide-$version-x86_64-unknown-linux-musl.tar.gz
+    tar -xvf zoxide-$version-x86_64-unknown-linux-musl.tar.gz
+    mv zoxide ~/.local/bin
+    rm zoxide-$version-x86_64-unknown-linux-musl.tar.gz
+}
+
+has_nu() {
+    if [ -f "$HOME/.local/bin/nu" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_nu() {
+    echo "==> Installing nu"
+    version="0.81.0"
+    wget https://github.com/nushell/nushell/releases/download/$version/nu-$version-x86_64-unknown-linux-musl.tar.gz
+    tar -xvf nu-$version-x86_64-unknown-linux-musl.tar.gz
+    mv nu-$version-x86_64-unknown-linux-musl/nu ~/.local/bin
+    rm -rf nu-$version-x86_64-unknown-linux-musl
+    rm nu-$version-x86_64-unknown-linux-musl.tar.gz
+}
+
+has_bat() {
+    if [ -f "$HOME/.local/bin/bat" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_bat() {
+    echo "==> Installing bat"
+    version="v0.23.0"
+    wget https://github.com/sharkdp/bat/releases/download/$version/bat-$version-x86_64-unknown-linux-musl.tar.gz
+    tar -xvf bat-$version-x86_64-unknown-linux-musl.tar.gz
+    mv bat-$version-x86_64-unknown-linux-musl/bat ~/.local/bin
+    rm -rf bat-$version-x86_64-unknown-linux-musl
+    rm bat-$version-x86_64-unknown-linux-musl.tar.gz
+}
+
+has_broot() {
+    if [ -f "$HOME/.local/bin/broot" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_broot() {
+    echo "==> Installing broot"
+    wget https://dystroy.org/broot/download/x86_64-linux/broot
+    chmod +x broot
+    mv broot ~/.local/bin
+}
+
+has_zellij() {
+    if [ -f "$HOME/.local/bin/zellij" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_zellij() {
+    echo "==> Installing zellij"
+    wget https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz
+    tar -xvf zellij-x86_64-unknown-linux-musl.tar.gz
+    mv zellij ~/.local/bin
+    rm zellij-x86_64-unknown-linux-musl.tar.gz
 }
 
 has_local-config() {
@@ -30,6 +144,7 @@ has_oh_my_posh() {
 }
 
 install_oh_my_posh() {
+    echo "==> Installing oh-my-posh"
     curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/.local/bin
 }
 
