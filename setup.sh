@@ -27,7 +27,7 @@ install_helix() {
     sudo apt update
     sudo apt install helix
     mkdir "$HOME/.config/helix"
-    ln -s "$HOME/nu/helix.nu" "$HOME/.config/helix/config.toml"
+    ln -s "$HOME/nu/helix.toml" "$HOME/.config/helix/config.toml"
 }
 
 has_helix() {
