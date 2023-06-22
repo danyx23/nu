@@ -216,4 +216,10 @@ install_nu_scripts() {
     git clone git@github.com:nushell/nu_scripts.git "$HOME/nu_scripts"
 }
 
-bootstrap
+# Check if any argument was passed
+if [ $# -gt 0 ]; then
+  # Call function by argument name
+  "$@"
+else
+  bootstrap
+fi
