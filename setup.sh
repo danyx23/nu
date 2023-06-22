@@ -16,6 +16,33 @@ bootstrap() {
     has_ripgrep || install_ripgrep
 }
 
+setup_apt_packages() {
+    sudo apt-get update
+    has_fzf || install_fzf
+    has_helix || install_helix
+}
+
+install_helix() {
+    sudo add-apt-repository ppa:maveonair/helix-editor
+    sudo apt update
+    sudo apt install helix
+    mkdir "$HOME/.config/helix"
+    ln -s "$HOME/nu/helix.nu" "$HOME/.config/helix/config.toml"
+}
+
+has_helix() {
+    if test -x "$(which hx)"
+    then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_fzf() {
+    sudo apt-get install fzf
+}
+
 has_fzf() {
     if test -x "$(which fzf)"
     then
