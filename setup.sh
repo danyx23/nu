@@ -2,12 +2,7 @@
 set -e
 
 bootstrap() {
-    if test -x "$(which fzf)"
-    then
-        echo "fzf is installed"
-    else
-        echo "fzf is not installed - please apt-get install it"
-    fi
+    has_fzf || echo "Please install fzf via apt"
     has_nu_scripts || install_nu_scripts
     has_env_file_link || link_env_file
     has_config_file_link || link_config_file
@@ -19,6 +14,15 @@ bootstrap() {
     has_nu || install_nu
     has_zoxide || install_zoxide
     has_ripgrep || install_ripgrep
+}
+
+has_fzf() {
+    if test -x "$(which fzf)"
+    then
+        return 0
+    else
+        return 1
+    fi
 }
 
 has_ripgrep() {
