@@ -82,8 +82,6 @@ let-env NU_PLUGIN_DIRS = [
     ($nu.default-config-dir | path join 'plugins')
 ]
 
-let-env EDITOR = "code -w"
-
 # if (which zoxide | is-empty) {
 #     echo "zoxide not found"
 # } else {
