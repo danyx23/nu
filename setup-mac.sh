@@ -3,10 +3,6 @@ set -e
 
 bootstrap() {
     has_brew_program fzf || install_brew_program fzf
-    has_nu_scripts || install_nu_scripts
-    has_env_file_link || link_env_file
-    has_config_file_link || link_config_file
-
     has_brew_program oh-my-posh || install_brew_program oh-my-posh
     has_brew_program zellij || install_brew_program zellij
     has_brew_program broot || install_brew_program broot
@@ -16,6 +12,11 @@ bootstrap() {
     has_brew_program ripgrep || install_brew_program ripgrep
     has_brew_program fd || install_brew_program fd
     has_brew_program helix || install_brew_program helix
+
+    has_nu_scripts || install_nu_scripts
+    has_env_file_link || link_env_file
+    has_config_file_link || link_config_file
+
 }
 
 
@@ -67,6 +68,7 @@ has_config_file_link() {
 }
 
 link_config_file() {
+    mkdir -p "$HOME/.config/nushell"
     ln -s "$HOME/nu/config.nu" "$HOME/.config/nushell/config.nu"
 }
 
@@ -79,6 +81,7 @@ has_env_file_link() {
 }
 
 link_env_file() {
+    mkdir -p "$HOME/.config/nushell"
     ln -s "$HOME/nu/env.nu" "$HOME/.config/nushell/env.nu"
 }
 
