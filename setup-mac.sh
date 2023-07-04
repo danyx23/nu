@@ -7,7 +7,7 @@ bootstrap() {
     has_brew_program zellij || install_brew_program zellij
     has_brew_program broot || install_brew_program broot
     has_brew_program bat || install_brew_program bat
-    has_brew_program nu || install_brew_program nu
+    has_brew_program nu || install_brew_program nushell
     has_brew_program zoxide || install_brew_program zoxide
     has_brew_program ripgrep || install_brew_program ripgrep
     has_brew_program fd || install_brew_program fd
@@ -60,7 +60,7 @@ install_oh_my_posh() {
 }
 
 has_config_file_link() {
-    if [ -f "$HOME/.config/nushell/config.nu" ]; then
+    if [ -f "$HOME/Library/Application Support/nushell/config.nu" ]; then
         return 0
     else
         return 1
@@ -68,12 +68,12 @@ has_config_file_link() {
 }
 
 link_config_file() {
-    mkdir -p "$HOME/.config/nushell"
-    ln -s "$HOME/nu/config.nu" "$HOME/.config/nushell/config.nu"
+    mkdir -p "$HOME/Library/Application Support/nushell"
+    ln -s "$HOME/nu/config.nu" "$HOME/Library/Application Support/nushell/config.nu"
 }
 
 has_env_file_link() {
-    if [ -f "$HOME/.config/nushell/env.nu" ]; then
+    if [ -f "$HOME/Library/Application Support/nushell/env.nu" ]; then
         return 0
     else
         return 1
@@ -81,8 +81,8 @@ has_env_file_link() {
 }
 
 link_env_file() {
-    mkdir -p "$HOME/.config/nushell"
-    ln -s "$HOME/nu/env.nu" "$HOME/.config/nushell/env.nu"
+    mkdir -p "$HOME/Library/Application Support/nushell"
+    ln -s "$HOME/nu/env.nu" "$HOME/Library/Application Support/nushell/env.nu"
 }
 
 
