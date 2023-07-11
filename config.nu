@@ -309,10 +309,31 @@ let-env config = {
     env_change: {
       PWD: [
         {
-          condition: {|before, after| ".venv/bin/activate.nu" | path exists }
-          code: "overlay use .venv/bin/activate.nu"
+          # if you enter a python project
+          condition: {|before, after| ["pyproject.toml" "requirements.txt"] | any {|f| $f | path exists } }
+          # drop any prior virtualenv, then use a new one if it exists
+          code: "
+            if ('.venv/bin/python' | path exists) {
+              let-env PATH = ($env.PATH | split row (char esep) | filter {|p| not $p =~ '.venv' } | prepend $\"($env.PWD)/.venv/bin\")
+            } else {
+              let-env PATH = ($env.PATH | split row (char esep) | filter {|p| not $p =~ '.venv' })
+            }
+          "
+        },
+        {
+          # if you enter a node project with nvm
+          condition: {|before, after| ".nvmrc" | path exists }
+          # drop any prior nvm context, and use a node version from fnm if one exists
+          code: "(
+            if ($\"($env.APP_CONFIG_DIR)/fnm/node-versions/v(cat .nvmrc)/installation/bin\" | path exists) {
+                let-env PATH = ($env.PATH | split row (char esep) | filter {|p| not p =~ 'fnm'} | prepend $\"($env.APP_CONFIG_DIR)/fnm/node-versions/v(cat .nvmrc)/installation/bin\")
+            } else {
+              print $\"Node v(cat .nvmrc) is not installed\";
+              print $\"Please run: fnm install (cat .nvmrc)\"
+                let-env PATH = ($env.PATH | split row (char esep) | filter {|p| not p =~ 'fnm'})
+            }
+          )"
         }
-
       ]
     }
     display_output: {||

@@ -93,3 +93,16 @@ let-env NU_PLUGIN_DIRS = [
 let-env PATH = ($env.PATH | split row (char esep) | prepend '~/.local/bin')
 
 let-env COLORTERM = truecolor
+
+let-env APP_CONFIG_DIR = (
+        if ((sys).host.name == 'Darwin')
+            { $"($env.HOME)/Library/Application Support" }
+        else
+            { $"($env.HOME)/.local/share" }
+    )
+let-env APP_EXEC_DIR = (
+        if ((sys).host.name == 'Darwin')
+            { $"/opt/homebrew/bin" }
+        else
+            { $"($env.HOME)/.local/bin" }
+    )
