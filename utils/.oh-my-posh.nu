@@ -6,7 +6,7 @@ export-env {
             { $"($env.HOME)/.local/bin/" }
     )
     $env.POWERLINE_COMMAND = 'oh-my-posh'
-    $env.POSH_THEME = $"($env.HOME)/nu/aux/montys.omp.json"
+    $env.POSH_THEME = $"($env.HOME)/nu/utils/montys.omp.json"
     $env.PROMPT_INDICATOR = ""
     $env.POSH_PID = (random uuid)
     # By default displays the right prompt on the first line

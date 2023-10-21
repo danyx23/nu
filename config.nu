@@ -181,7 +181,7 @@ let light_theme = {
 
 
 # The default config record. This is where much of your global configuration is setup.
-let-env config = {
+$env.config = {
   # true or false to enable or disable the welcome banner at startup
   show_banner: false
   ls: {
@@ -190,9 +190,6 @@ let-env config = {
   }
   rm: {
     always_trash: false # always act as if -t was given. Can be overridden with -p
-  }
-  cd: {
-    abbreviations: false # allows `cd s/o/f` to expand to `cd some/other/folder`
   }
   table: {
     mode: rounded # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
@@ -314,9 +311,9 @@ let-env config = {
           # drop any prior virtualenv, then use a new one if it exists
           code: "
             if ('.venv/bin/python' | path exists) {
-              let-env PATH = ($env.PATH | split row (char esep) | filter {|p| not $p =~ '.venv' } | prepend $\"($env.PWD)/.venv/bin\")
+              $env.PATH = ($env.PATH | split row (char esep) | filter {|p| not $p =~ '.venv' } | prepend $\"($env.PWD)/.venv/bin\")
             } else {
-              let-env PATH = ($env.PATH | split row (char esep) | filter {|p| not $p =~ '.venv' })
+              $env.PATH = ($env.PATH | split row (char esep) | filter {|p| not $p =~ '.venv' })
             }
           "
         },
@@ -326,11 +323,11 @@ let-env config = {
           # drop any prior nvm context, and use a node version from fnm if one exists
           code: "(
             if ($\"($env.APP_CONFIG_DIR)/fnm/node-versions/v(cat .nvmrc)/installation/bin\" | path exists) {
-                let-env PATH = ($env.PATH | split row (char esep) | filter {|p| not p =~ 'fnm'} | prepend $\"($env.APP_CONFIG_DIR)/fnm/node-versions/v(cat .nvmrc)/installation/bin\")
+                $env.PATH = ($env.PATH | split row (char esep) | filter {|p| not p =~ 'fnm'} | prepend $\"($env.APP_CONFIG_DIR)/fnm/node-versions/v(cat .nvmrc)/installation/bin\")
             } else {
               print $\"Node v(cat .nvmrc) is not installed\";
               print $\"Please run: fnm install (cat .nvmrc)\"
-                let-env PATH = ($env.PATH | split row (char esep) | filter {|p| not p =~ 'fnm'})
+                $env.PATH = ($env.PATH | split row (char esep) | filter {|p| not p =~ 'fnm'})
             }
           )"
         }
@@ -566,10 +563,10 @@ let-env config = {
   ]
 }
 
-source ~/nu/aux/.oh-my-posh.nu
+source ~/nu/utils/.oh-my-posh.nu
 source ~/nu_scripts/custom-completions/git/git-completions.nu
 source ~/nu_scripts/custom-completions/poetry/poetry-completions.nu
 source ~/nu_scripts/custom-completions/make/make-completions.nu
 source ~/nu/local-config.nu
-source ~/nu/aux/.zoxide.nu
-source ~/nu/aux/broot.nu
+source ~/nu/utils/.zoxide.nu
+source ~/nu/utils/broot.nu
