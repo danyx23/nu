@@ -56,7 +56,6 @@ export def chart-indicators [
     chartSlug: string # slug of the chart
 ] {
     let chartConfig = chart $chartSlug
-    let indicatorIds = $chartConfig.dimensions | each { |it| $it.variableId }
-    let indicators = $indicatorIds | par-each { |it| indicator ($it | into int) }
+    let indicators = $chartConfig.dimensions | par-each { |it| indicator ($it.variableId | into int) | insert "property" $it.property }
     $indicators
 }
