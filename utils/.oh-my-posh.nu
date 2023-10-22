@@ -1,7 +1,7 @@
 $env.config = ($env.config | upsert render_right_prompt_on_last_line true)
 
 $env.POWERLINE_COMMAND = 'oh-my-posh'
-$env.POSH_THEME = "/home/daniel/nu/utils/montys.omp.json"
+$env.POSH_THEME = $"($nu.home-path)/nu/utils/montys.omp.json"
 $env.PROMPT_INDICATOR = ""
 $env.POSH_PID = (random uuid)
 $env.POSH_SHELL_VERSION = (version | get version)
