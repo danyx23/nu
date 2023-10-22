@@ -2,6 +2,26 @@
 #
 # version = 0.79.0
 
+def path_append [path] {
+    let pathvar = if "PATH" in $env { "PATH" } else { "Path" }
+    load-env {
+        $pathvar: (
+            $env | get $pathvar |
+            split row (char esep) |
+            append path )
+    }
+}
+
+def path_prepend [path] {
+    let pathvar = if "PATH" in $env { "PATH" } else { "Path" }
+    load-env {
+        $pathvar: (
+            $env | get $pathvar |
+            split row (char esep) |
+            append path )
+    }
+}
+
 def create_left_prompt [] {
     mut home = ""
     try {
@@ -30,7 +50,7 @@ def create_right_prompt [] {
     let time_segment = ([
         (ansi reset)
         (ansi magenta)
-        (date now | date format '%m/%d/%Y %r')
+        (date now | format date '%m/%d/%Y %r')
     ] | str join)
 
     let last_exit_code = if ($env.LAST_EXIT_CODE != 0) {([
@@ -88,21 +108,23 @@ $env.NU_PLUGIN_DIRS = [
 #     zoxide init nushell | save -f ~/.zoxide.nu
 # }
 
-# To add entries to PATH (on Windows you might use Path), you can use the following pattern:
-# $env.PATH = ($env.PATH | split row (char esep) | prepend '/some/path')
-$env.PATH = ($env.PATH | split row (char esep) | prepend '~/.local/bin')
-
 $env.COLORTERM = truecolor
 
 $env.APP_CONFIG_DIR = (
-        if ((sys).host.name == 'Darwin')
-            { $"($env.HOME)/Library/Application Support" }
+        if ($nu.os-info.name == 'Darwin')
+            { $"($nu.home-path)/Library/Application Support" }
+        else if ($nu.os-info.name == 'windows')
+            { $"($env.APPDATA)/Roaming" }
         else
-            { $"($env.HOME)/.local/share" }
+            { $"($nu.home-path)/.local/share" }
     )
 $env.APP_EXEC_DIR = (
         if ((sys).host.name == 'Darwin')
             { $"/opt/homebrew/bin" }
+        else if ($nu.os-info.name == 'windows')
+            { $"($nu.home-path)/bin" }
         else
-            { $"($env.HOME)/.local/bin" }
+            { $"($nu.home-path)/.local/bin" }
     )
+
+path_prepend $env.APP_EXEC_DIR
