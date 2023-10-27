@@ -59,3 +59,6 @@ export def chart-indicators [
     let indicators = $chartConfig.dimensions | par-each { |it| indicator ($it.variableId | into int) | insert "property" $it.property }
     $indicators
 }
+
+export def main [] {
+}
