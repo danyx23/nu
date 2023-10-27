@@ -19,3 +19,21 @@ export def query [
     }
     return $response.body.rows
 }
+
+export def tables [] {
+    http get http://datasette-private/owid.json | get tables
+}
+
+export def views [] {
+    http get http://datasette-private/owid.json | get views
+}
+
+export def targets [] {
+    (tables | get name) ++ (views | get name)
+}
+
+export def columns [
+    name: string@targets
+] {
+    http get http://datasette-private/owid.json | get tables | where name == $name | get columns
+}
