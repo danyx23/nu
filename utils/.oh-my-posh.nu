@@ -6,7 +6,7 @@ $env.PROMPT_INDICATOR = ""
 $env.POSH_PID = (random uuid)
 $env.POSH_SHELL_VERSION = (version | get version)
 
-let oh_my_posh_executable = if ($nu.os-info.name == 'windows') { 'oh-my-posh' } else { $"($env.APP_EXEC_DIR)/oh-my-posh" }
+let oh_my_posh_executable = "oh-my-posh"
 
 def posh_cmd_duration [] {
     # We have to do this because the initial value of `$env.CMD_DURATION_MS` is always `0823`,
