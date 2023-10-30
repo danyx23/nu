@@ -6,6 +6,7 @@
 #  To add a profile called "readonly", make [client-readonly] section in ~/my.cnf. Then
 #  this command will detect it and let you switch to and from it.
 #
+# Written by Lars Yencken
 
 from pathlib import Path
 import configparser

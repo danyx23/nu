@@ -26,15 +26,16 @@ export def buckets [] {
 export def objects [
     bucket: string@buckets
     prefix: string
-    maxItems: number = 200
+    --limit: number = 200
 ] {
-    query list-objects-v2 "--bucket" $bucket "--prefix" $prefix "--max-items" $"($maxItems)"
+    query list-objects-v2 "--bucket" $bucket "--prefix" $prefix "--max-items" $"($limit)"
     | from json
     | get Contents
     | update LastModified { into datetime }
     | update Size { into filesize }
 }
 
+# Deletes objects in R2. The bucket is passed as a parameter, the keys are streamed in as input
 export def delete-objects [
     bucket: string@buckets
     --force
@@ -59,4 +60,8 @@ export def delete-objects [
         $result = $deleted.Deleted
     }
     $result
+}
+
+export def main [] {
+
 }

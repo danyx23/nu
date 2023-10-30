@@ -1,7 +1,7 @@
 # Query the private OWID datasette instance with SQL
 export def query [
     sql: string # SQL query to run
-    jsonColumn? #
+    jsonColumn? # Indicate a column as json which will return it as an object as opposed to a string
 ] {
     let args = { sql: $sql }
     let args = if $jsonColumn != null { $args | insert "_json" $jsonColumn } else { $args}
@@ -20,20 +20,28 @@ export def query [
     return $response.body.rows
 }
 
+# Fetch the list of tables from the private OWID datasette instance
 export def tables [] {
     http get http://datasette-private/owid.json | get tables
 }
 
+# Fetch the list of views from the private OWID datasette instance
 export def views [] {
     http get http://datasette-private/owid.json | get views
 }
 
+# Fetch the list of tables and views from the private OWID datasette instance
 export def targets [] {
     (tables | get name) ++ (views | get name)
 }
 
+# Fetch the list of columns for a given table from the private OWID datasette instance
 export def columns [
-    name: string@targets
+    name: string@targets # Name of the table to fetch columns for
 ] {
     http get http://datasette-private/owid.json | get tables | where name == $name | get columns
+}
+
+export def main [] {
+
 }
