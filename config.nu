@@ -6,6 +6,9 @@
 # https://www.nushell.sh/book/coloring_and_theming.html
 # And here is the theme collection
 # https://github.com/nushell/nu_scripts/tree/main/themes
+
+use "~/nu/utils/envtools.nu"
+
 let dark_theme = {
     # color for nushell primitives
     separator: white
@@ -288,9 +291,9 @@ $env.config = {
                 # drop any prior virtualenv, then use a new one if it exists
                 code: "
                     if ('.venv/bin/python' | path exists) {
-                    $env.PATH = ($env.PATH | split row (char esep) | filter {|p| not $p =~ '.venv' } | prepend $\"($env.PWD)/.venv/bin\")
+                       envtools pathenv load | filter {|p| not $p =~ '.venv' } | prepend $\"($env.PWD)/.venv/bin\") | envtools pathenv save
                     } else {
-                    $env.PATH = ($env.PATH | split row (char esep) | filter {|p| not $p =~ '.venv' })
+                        envtools pathenv load | filter {|p| not $p =~ '.venv' } | envtools pathenv save
                     }
                 "
                 },
@@ -299,12 +302,12 @@ $env.config = {
                 condition: {|before, after| ".nvmrc" | path exists }
                 # drop any prior nvm context, and use a node version from fnm if one exists
                 code: "(
-                    if ($\"($env.APP_CONFIG_DIR)/fnm/node-versions/v(cat .nvmrc)/installation/bin\" | path exists) {
-                        $env.PATH = ($env.PATH | split row (char esep) | filter {|p| not p =~ 'fnm'} | prepend $\"($env.APP_CONFIG_DIR)/fnm/node-versions/v(cat .nvmrc)/installation/bin\")
+                    if ($\"($env.APP_CONFIG_DIR)/fnm/node-versions/v((open .nvmrc | str trim))/installation/bin\" | path exists) {
+                        envtools pathenv load | filter {|p| not p =~ 'fnm'} | prepend $\"($env.APP_CONFIG_DIR)/fnm/node-versions/v((open .nvmrc | str trim))/installation/bin\") | envtools pathenv save
                     } else {
-                    print $\"Node v(cat .nvmrc) is not installed\";
-                    print $\"Please run: fnm install (cat .nvmrc)\"
-                        $env.PATH = ($env.PATH | split row (char esep) | filter {|p| not p =~ 'fnm'})
+                        print $\"Node v((open .nvmrc | str trim)) is not installed\"
+                        print $\"Please run: fnm install ((open .nvmrc | str trim))\"
+                        envtools pathenv load | filter {|p| not p =~ 'fnm'} | envtools pathenv save
                     }
                 )"
                 }
@@ -840,3 +843,5 @@ source ~/nu_scripts/custom-completions/make/make-completions.nu
 source ~/nu/local-config.nu
 source ~/nu/utils/.zoxide.nu
 source ~/nu/utils/broot.nu
+use ~/nu/utils/fnm.nu setup
+setup

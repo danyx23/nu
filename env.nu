@@ -114,12 +114,12 @@ $env.APP_CONFIG_DIR = (
         if ($nu.os-info.name == 'Darwin')
             { $"($nu.home-path)/Library/Application Support" }
         else if ($nu.os-info.name == 'windows')
-            { $"($env.APPDATA)/Roaming" }
+            { $"($env.APPDATA)" }
         else
             { $"($nu.home-path)/.local/share" }
     )
 $env.APP_EXEC_DIR = (
-        if ((sys).host.name == 'Darwin')
+        if ($nu.os-info.name == 'Darwin')
             { $"/opt/homebrew/bin" }
         else if ($nu.os-info.name == 'windows')
             { $"($nu.home-path)/bin" }
