@@ -126,5 +126,6 @@ $env.APP_EXEC_DIR = (
         else
             { $"($nu.home-path)/.local/bin" }
     )
+let-env PIPENV_VENV_IN_PROJECT = true
 
 path_prepend $env.APP_EXEC_DIR
