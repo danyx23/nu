@@ -44,7 +44,7 @@ def use(profile, config_path):
     config = _parse_config(config_path)
     name = f'client-{profile}'
     config['client'] = config[name]
-    with open(MYSQL_CONFIG, 'w') as f:
+    with open(config_path, 'w') as f:
         config.write(f)
 
 

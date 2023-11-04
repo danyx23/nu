@@ -43,6 +43,12 @@ export def delete-objects [
     let keys = $in
     mut proceed = $force
     mut result = [[Key]; [""]]
+    let whitelisted_buckets = ["owid-api-staging", "owid-catalog-staging"]
+
+    if not ($bucket in $whitelisted_buckets) {
+        print $"(ansi red)ATM you can only delete objects in the following buckets: ($whitelisted_buckets).(ansi reset)"
+        $proceed = false
+    }
 
     if not $force {
         let count = $keys | length

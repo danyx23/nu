@@ -845,3 +845,4 @@ source ~/nu/utils/.zoxide.nu
 source ~/nu/utils/broot.nu
 use ~/nu/utils/fnm.nu setup
 setup
+overlay use --prefix ~/nu/owid
