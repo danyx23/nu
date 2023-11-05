@@ -111,7 +111,7 @@ $env.NU_PLUGIN_DIRS = [
 $env.COLORTERM = truecolor
 
 $env.APP_CONFIG_DIR = (
-        if ($nu.os-info.name == 'Darwin')
+        if ($nu.os-info.name == 'macos')
             { $"($nu.home-path)/Library/Application Support" }
         else if ($nu.os-info.name == 'windows')
             { $"($env.APPDATA)" }
@@ -119,7 +119,7 @@ $env.APP_CONFIG_DIR = (
             { $"($nu.home-path)/.local/share" }
     )
 $env.APP_EXEC_DIR = (
-        if ($nu.os-info.name == 'Darwin')
+        if ($nu.os-info.name == 'macos')
             { $"/opt/homebrew/bin" }
         else if ($nu.os-info.name == 'windows')
             { $"($nu.home-path)/bin" }
