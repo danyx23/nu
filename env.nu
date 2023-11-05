@@ -2,23 +2,23 @@
 #
 # version = 0.79.0
 
-def path_append [path] {
+def --env path_append [path] {
     let pathvar = if "PATH" in $env { "PATH" } else { "Path" }
     load-env {
         $pathvar: (
             $env | get $pathvar |
             split row (char esep) |
-            append path )
+            append $path )
     }
 }
 
-def path_prepend [path] {
+def --env path_prepend [path] {
     let pathvar = if "PATH" in $env { "PATH" } else { "Path" }
     load-env {
         $pathvar: (
             $env | get $pathvar |
             split row (char esep) |
-            append path )
+            append $path )
     }
 }
 
@@ -50,7 +50,7 @@ def create_right_prompt [] {
     let time_segment = ([
         (ansi reset)
         (ansi magenta)
-        (date now | date format '%m/%d/%Y %r')
+        (date now | format date '%m/%d/%Y %r')
     ] | str join)
 
     let last_exit_code = if ($env.LAST_EXIT_CODE != 0) {([
