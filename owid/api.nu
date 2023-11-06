@@ -1,8 +1,11 @@
+use configuration.nu
+
 # Fetches the metadata for the indicator with the given id
 export def metadata [
     indicatorId: int # Id of the indicator
 ] {
-    http get $"https://api.ourworldindata.org/v1/indicators/($indicatorId).metadata.json"
+    let conf = configuration get
+    http get $"($conf.apiUrl)($indicatorId).metadata.json"
 }
 
 # Fetches the data for the indicator with the given id.
@@ -10,15 +13,18 @@ export def metadata [
 export def data [
     indicatorId: int # Id of the indicator
 ] {
-    let data = http get $"https://api.ourworldindata.org/v1/indicators/($indicatorId).data.json"
-    # zip creates a list of 2-tuple lists and it doesn't support more than one list so reformatting a record with 3 keys, entities, years and values, each
-    # having a long array is a bit tedious:
-    $data.entities
-    | zip $data.values
-    | each { {entity: $in.0 value: $in.1} }
-    | zip $data.years
-    | each { { entity: $in.0.entity value: $in.0.value year: $in.1 } }
+    let conf = configuration get
+    let data = http get $"($conf.apiUrl)($indicatorId).data.json"
 
+    # I considered using zip here but nushell only has zip for 2 lists at a time and that made things a bit messier than I liked.
+    let numRows = $data.entities | length
+
+    0..($numRows - 1) | each { |row|
+        let entity = $data | get entities | get $row
+        let year = $data | get years | get $row
+        let value = $data | get values | get $row
+        { entity: $entity value: $value year: $year }
+    }
 }
 
 # Fetches the metadata and data for the indicator with the given id and
@@ -38,7 +44,8 @@ export def indicator [
 export def chart [
     chartSlug: string # slug of the chart
 ] {
-    let chartPage = http get $"https://ourworldindata.org/grapher/($chartSlug)"
+    let conf = configuration get
+    let chartPage = http get $"($conf.siteUrl)grapher/($chartSlug)"
     let relevantLines = (
         $chartPage
         | lines

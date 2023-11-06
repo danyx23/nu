@@ -1,16 +1,14 @@
+use configuration.nu
+
 # List the profiles in the .my.cnf file.
 # This runs a python helper script that requires the 'click' package to be installed.
 export def "list-profiles" [] {
   # On Windows the mysql cli and mysqlsh are insane and source from the weirdest, most non-standard places
   # mysql at least takes an $APPDATA/MySQL/.my-login.cnf into account but mysqlsh does not so we are left with
   # resorting to the one on C:\
-  let myCnfPath = if $nu.os-info.name == "windows" {'C:\my.cnf'} else {'~/.my.cnf'}
-  let pythonHelperPath = if $env.owid.mysql_profile_helper? != null {
-        $env.owid.mysql_profile_helper | path expand
-    } else {
-        ~/.local/bin/mysql-profile.py
-    }
-  python $pythonHelperPath list --config-path $myCnfPath
+
+  let conf = configuration get
+  python $conf.mysqlProfileHelper list --config-path $conf.mysqlProfile
 }
 
 # Use a profile from the .my.cnf file.
@@ -18,13 +16,8 @@ export def "list-profiles" [] {
 export def "use-profile" [
     name: string@list-profiles # Name of the profile to switch to
 ] {
-  let myCnfPath = if $nu.os-info.name == "windows" {'C:\my.cnf'} else {'~/.my.cnf'}
-  let pythonHelperPath = if $env.owid.mysql_profile_helper? != null {
-        $env.owid.mysql_profile_helper | path expand
-    } else {
-        ~/.local/bin/mysql-profile.py
-    }
-  python $pythonHelperPath use $name --config-path $myCnfPath
+  let conf = configuration get
+  python $conf.mysqlProfileHelper use $name --config-path $conf.mysqlProfile
 }
 
 # Show the tables in the database

@@ -1,12 +1,15 @@
+use configuration.nu
+
 # Query the private OWID datasette instance with SQL
 export def query [
     sql: string # SQL query to run
     jsonColumn? # Indicate a column as json which will return it as an object as opposed to a string
 ] {
+    let conf = configuration get
     let args = { sql: $sql }
     let args = if $jsonColumn != null { $args | insert "_json" $jsonColumn } else { $args}
     let escaped = $args | url build-query # | str replace --all '%20' '+' | str replace --all '%' '~'
-    let url = $"http://datasette-private/owid.json?_shape=objects&($escaped)"
+    let url = $"($conf.datasetteUrl)owid.json?_shape=objects&($escaped)"
     let response = http get -e -f $url
     let body = $response.body
     if $response.status != 200 or $body.ok != true {
@@ -22,12 +25,14 @@ export def query [
 
 # Fetch the list of tables from the private OWID datasette instance
 export def tables [] {
-    http get http://datasette-private/owid.json | get tables
+    let conf = configuration get
+    http get $"($conf.datasetteUrl)owid.json" | get tables
 }
 
 # Fetch the list of views from the private OWID datasette instance
 export def views [] {
-    http get http://datasette-private/owid.json | get views
+    let conf = configuration get
+    http get $"($conf.datasetteUrl)owid.json" | get views
 }
 
 # Fetch the list of tables and views from the private OWID datasette instance
@@ -39,7 +44,8 @@ export def targets [] {
 export def columns [
     name: string@targets # Name of the table to fetch columns for
 ] {
-    http get http://datasette-private/owid.json | get tables | where name == $name | get columns
+    let conf = configuration get
+    http get $"($conf.datasetteUrl)owid.json"| get tables | where name == $name | get columns
 }
 
 export def main [] {

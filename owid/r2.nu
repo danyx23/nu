@@ -1,13 +1,13 @@
+use configuration.nu
+
 # Run the "aws s3api" command against the Cloudflare S3-compatible API
 # Needs the aws cli tool to be installed and the $env.owid.cfUserId environment variable to be set
 export def query [
     ...rest: string # a command like listbuckets. Run with a bogus command to see the full list of commands
 ] {
     let stdin = $in
-    if (($env.owid == null) or ($env.owid.cfUserId == null)) {
-        print 'Please set the owid environment variable to a record containing the CF customer id
-$env.owid = { cfUserId: "..." }
-you can find the cf user id in the Cloudflare dashboard under "My Profile"'
+    if ($env.owid.cfUserId == null or $env.owid.cfUserId == "") {
+        print 'Please run 'owid configure setup' and set a cfUserId'
     } else {
         if ((which aws | length) < 1) {
             print "Please install the aws cli tool"
@@ -62,7 +62,7 @@ export def delete-objects [
         }
     }
     if $proceed {
-        let deleted = $keys | { Objects: $in Quiet: true } | to json -r | owid r2 query delete-objects "--bucket" $bucket "--delete" $in | from json
+        let deleted = $keys | { Objects: $in Quiet: true } | to json -r | query delete-objects "--bucket" $bucket "--delete" $in | from json
         $result = $deleted.Deleted
     }
     $result
