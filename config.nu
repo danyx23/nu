@@ -843,6 +843,7 @@ source ~/nu_scripts/custom-completions/make/make-completions.nu
 source ~/nu/local-config.nu
 source ~/nu/utils/.zoxide.nu
 source ~/nu/utils/broot.nu
-use ~/nu/utils/fnm.nu setup
-setup
+use ~/nu_scripts/modules/fnm/fnm.nu
+# use ~/nu/utils/fnm.nu setup
+# setup
 overlay use --prefix ~/nu/owid

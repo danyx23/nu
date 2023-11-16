@@ -8,7 +8,7 @@ export def "list-profiles" [] {
   # resorting to the one on C:\
 
   let conf = configuration get
-  python $conf.mysqlProfileHelper list --config-path $conf.mysqlProfile
+  python ($conf.mysqlProfileHelper | path expand) list --config-path ($conf.mysqlProfile | path expand)
 }
 
 # Use a profile from the .my.cnf file.
@@ -17,7 +17,7 @@ export def "use-profile" [
     name: string@list-profiles # Name of the profile to switch to
 ] {
   let conf = configuration get
-  python $conf.mysqlProfileHelper use $name --config-path $conf.mysqlProfile
+  python ($conf.mysqlProfileHelper | path expand) use $name --config-path ($conf.mysqlProfile | path expand)
 }
 
 # Show the tables in the database
