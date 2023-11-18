@@ -67,5 +67,6 @@ export def chart-indicators [
     $indicators
 }
 
+# Commands to interact with our static metadata and json file based API
 export def main [] {
 }

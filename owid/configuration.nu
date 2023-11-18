@@ -52,3 +52,8 @@ export def --env setup [] {
     print "Updated OWID config. To persist it, add an entry to your env.nu that persists the current value of $env.owid:"
     print $"$env.owid | to nuon --indent 2 | \"\\n$env.owid = \" ++ $in | save --append ($nu.env-path)"
 }
+
+# Commands to change the configuration or retrieve configuration values
+export def main [] {
+
+}

@@ -48,6 +48,7 @@ export def columns [
     http get $"($conf.datasetteUrl)owid.json"| get tables | where name == $name | get columns
 }
 
+# Commands to query our datasette instances
 export def main [] {
 
 }

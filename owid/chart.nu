@@ -2,23 +2,23 @@ use mysql.nu
 use api.nu
 
 # Fetch a chart from mysql via the slug
-export def "by slug" [
+export def "from slug" [
     slug: string
 ]  {
-    let chart = mysql query $"select * from charts where slug = '($slug)'"
-    $chart
-}
-
-# Fetch the metadata of all indicators used in a chart
-export def "indicator metadata by slug" [
-    slug: string
-] {
-    let chart = by slug $slug
-    let indicatorIds = $chart | get config.dimensions | each {$in.variableId} | flatten
-    $indicatorIds | par-each {|it| api metadata ($it)}
+    let slug = if $slug starts-with 'http' { $slug | split row "/" | last} else { $slug }
+    let sql = $"select config from charts where slug = '($slug)'"
+    let chart = mysql query $sql
+    $chart | get config
 }
 
 
+
+# Simplify a chart config by rejecting verbose fields
+export def simplify [] {
+    reject data
+}
+
+# Commands to quickly work with charts
 export def main [] {
 
 }

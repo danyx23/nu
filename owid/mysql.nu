@@ -2,7 +2,7 @@ use configuration.nu
 
 # List the profiles in the .my.cnf file.
 # This runs a python helper script that requires the 'click' package to be installed.
-export def "list-profiles" [] {
+export def "profiles list" [] {
   # On Windows the mysql cli and mysqlsh are insane and source from the weirdest, most non-standard places
   # mysql at least takes an $APPDATA/MySQL/.my-login.cnf into account but mysqlsh does not so we are left with
   # resorting to the one on C:\
@@ -13,8 +13,8 @@ export def "list-profiles" [] {
 
 # Use a profile from the .my.cnf file.
 # This runs a python helper script that requires the 'click' package to be installed.
-export def "use-profile" [
-    name: string@list-profiles # Name of the profile to switch to
+export def "profiles use" [
+    name: string@"profiles list" # Name of the profile to switch to
 ] {
   let conf = configuration get
   python ($conf.mysqlProfileHelper | path expand) use $name --config-path ($conf.mysqlProfile | path expand)
@@ -22,12 +22,12 @@ export def "use-profile" [
 
 # Show the tables in the database
 export def "tables" [] {
-  query 'show tables'
+  query 'show tables' | rename "tables"  | get tables
 }
 
 # Get the table values for completions
 def "tableCompletion" [] {
-    tables | get table
+    tables
 }
 
 
@@ -87,14 +87,7 @@ export def "query" [sql] {
   }
 }
 
-export def "chart by-slug" [
-    slug: string # Slug of the chart to retrieve
-] {
-    let slug = if $slug starts-with 'http' { $slug | split row "/" | last} else { $slug }
-    let sql = $"select * from charts where slug = '($slug)'"
-    query $sql
-}
-
+# Commands to query one of our MySQL databases
 export def main [] {
 
 }

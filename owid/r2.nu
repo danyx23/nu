@@ -68,6 +68,7 @@ export def delete-objects [
     $result
 }
 
+# Commands to interact with our Cloudflare R2 buckets
 export def main [] {
 
 }
