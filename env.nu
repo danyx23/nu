@@ -131,3 +131,5 @@ $env.PIPENV_VENV_IN_PROJECT = true
 path_prepend $env.APP_EXEC_DIR
 
 $env.POETRY_VIRTUALENVS_IN_PROJECT = "true"
+
+envtools pathenv add $"($nu.home-path)/.rye/shims/"

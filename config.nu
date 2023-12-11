@@ -296,20 +296,6 @@ $env.config = {
                         envtools pathenv load | filter {|p| not $p =~ '.venv' } | envtools pathenv save
                     }
                 "
-                },
-                {
-                # if you enter a node project with nvm
-                condition: {|before, after| ".nvmrc" | path exists }
-                # drop any prior nvm context, and use a node version from fnm if one exists
-                code: "(
-                    if ($\"($env.APP_CONFIG_DIR)/fnm/node-versions/v((open .nvmrc | str trim))/installation/bin\" | path exists) {
-                        envtools pathenv load | filter {|p| not p =~ 'fnm'} | prepend $\"($env.APP_CONFIG_DIR)/fnm/node-versions/v((open .nvmrc | str trim))/installation/bin\") | envtools pathenv save
-                    } else {
-                        print $\"Node v((open .nvmrc | str trim)) is not installed\"
-                        print $\"Please run: fnm install ((open .nvmrc | str trim))\"
-                        envtools pathenv load | filter {|p| not p =~ 'fnm'} | envtools pathenv save
-                    }
-                )"
                 }
             ]
         }
@@ -840,10 +826,7 @@ source ~/nu/utils/.oh-my-posh.nu
 source ~/nu_scripts/custom-completions/git/git-completions.nu
 source ~/nu_scripts/custom-completions/poetry/poetry-completions.nu
 source ~/nu_scripts/custom-completions/make/make-completions.nu
-source ~/nu/local-config.nu
 source ~/nu/utils/.zoxide.nu
 source ~/nu/utils/broot.nu
-use ~/nu_scripts/modules/fnm/fnm.nu
-# use ~/nu/utils/fnm.nu setup
-# setup
-overlay use --prefix ~/nu/owid
+use ~/owid-nushell/owid
+source ~/nu/local-config.nu
