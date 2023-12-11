@@ -2,7 +2,7 @@
 #
 # version = 0.79.0
 
-use utils/envtools.nu
+use ~/nu/utils/envtools.nu
 
 def create_left_prompt [] {
     mut home = ""
