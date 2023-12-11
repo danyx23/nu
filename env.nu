@@ -2,25 +2,7 @@
 #
 # version = 0.79.0
 
-def --env path_append [path] {
-    let pathvar = if "PATH" in $env { "PATH" } else { "Path" }
-    load-env {
-        $pathvar: (
-            $env | get $pathvar |
-            split row (char esep) |
-            append $path )
-    }
-}
-
-def --env path_prepend [path] {
-    let pathvar = if "PATH" in $env { "PATH" } else { "Path" }
-    load-env {
-        $pathvar: (
-            $env | get $pathvar |
-            split row (char esep) |
-            append $path )
-    }
-}
+use utils/envtools.nu
 
 def create_left_prompt [] {
     mut home = ""
@@ -128,8 +110,8 @@ $env.APP_EXEC_DIR = (
     )
 $env.PIPENV_VENV_IN_PROJECT = true
 
-path_prepend $env.APP_EXEC_DIR
+envtools pathenv add $env.APP_EXEC_DIR
 
 $env.POETRY_VIRTUALENVS_IN_PROJECT = "true"
 
-pathenv add $"($nu.home-path)/.rye/shims/"
+envtools pathenv add $"($nu.home-path)/.rye/shims/"
