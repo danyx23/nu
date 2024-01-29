@@ -1,4 +1,6 @@
-$env.PATH = ($env.PATH | prepend $"($nu.home-path)/.config/carapace/bin")
+use envtools.nu "pathenv add"
+
+pathenv add $"($nu.home-path)/.config/carapace/bin")
 
 def --env get-env [name] { $env | get $name }
 def --env set-env [name, value] { load-env { $name: $value } }
