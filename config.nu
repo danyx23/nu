@@ -833,4 +833,5 @@ use ~/nu_scripts/modules/fnm/fnm.nu
 # setup
 source ~/nu/utils/carapace-init.nu
 use ~/owid-nushell/owid
+source ~/owid-nushell/aliases.nu
 source ~/nu/local-config.nu

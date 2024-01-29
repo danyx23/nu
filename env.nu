@@ -102,15 +102,15 @@ $env.APP_CONFIG_DIR = (
     )
 $env.APP_EXEC_DIR = (
         if ($nu.os-info.name == 'macos')
-            { $"/opt/homebrew/bin" }
+            {[  $"/opt/homebrew/bin"  ]}
         else if ($nu.os-info.name == 'windows')
-            { $"($nu.home-path)/bin" }
+            {[  $"($nu.home-path)/bin"  $"($nu.home-path)/.local/bin"]}
         else
-            { $"($nu.home-path)/.local/bin" }
+            {[  $"($nu.home-path)/.local/bin"  ]}
     )
 $env.PIPENV_VENV_IN_PROJECT = true
 
-envtools pathenv add $env.APP_EXEC_DIR
+$env.APP_EXEC_DIR | each {|it| envtools pathenv add $it}
 
 $env.POETRY_VIRTUALENVS_IN_PROJECT = "true"
 
