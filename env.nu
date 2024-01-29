@@ -110,7 +110,7 @@ $env.APP_EXEC_DIR = (
     )
 $env.PIPENV_VENV_IN_PROJECT = true
 
-$env.APP_EXEC_DIR | each {|it| envtools pathenv add $it}
+for $it in $env.APP_EXEC_DIR {envtools pathenv add $it}
 
 $env.POETRY_VIRTUALENVS_IN_PROJECT = "true"
 
