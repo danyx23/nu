@@ -291,7 +291,7 @@ $env.config = {
                 # drop any prior virtualenv, then use a new one if it exists
                 code: "
                     if ('.venv/bin/python' | path exists) {
-                       envtools pathenv load | filter {|p| not $p =~ '.venv' } | prepend $\"($env.PWD)/.venv/bin\") | envtools pathenv save
+                       envtools pathenv load | filter {|p| not $p =~ '.venv' } | prepend $\"($env.PWD)/.venv/bin\" | envtools pathenv save
                     } else {
                         envtools pathenv load | filter {|p| not $p =~ '.venv' } | envtools pathenv save
                     }
