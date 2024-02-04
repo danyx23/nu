@@ -115,3 +115,5 @@ for $it in $env.APP_EXEC_DIR {envtools pathenv add $it}
 $env.POETRY_VIRTUALENVS_IN_PROJECT = "true"
 
 envtools pathenv add $"($nu.home-path)/.rye/shims/"
+
+$env.SCRIPT_SHELL = /bin/zsh
