@@ -7,6 +7,7 @@
 # And here is the theme collection
 # https://github.com/nushell/nu_scripts/tree/main/themes
 
+use std
 use "~/nu/utils/envtools.nu"
 
 let dark_theme = {
@@ -291,9 +292,9 @@ $env.config = {
                 # drop any prior virtualenv, then use a new one if it exists
                 code: "
                     if ('.venv/bin/python' | path exists) {
-                       envtools pathenv load | filter {|p| not $p =~ '.venv' } | prepend $\"($env.PWD)/.venv/bin\" | envtools pathenv save
+                       envtools pathenv load | filter {|p| $p !~ '.venv' } | prepend $\"($env.PWD)/.venv/bin\" | envtools pathenv save
                     } else {
-                        envtools pathenv load | filter {|p| not $p =~ '.venv' } | envtools pathenv save
+                        envtools pathenv load | filter {|p| $p !~ '.venv' } | envtools pathenv save
                     }
                 "
                 }
