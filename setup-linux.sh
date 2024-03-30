@@ -29,7 +29,7 @@ has_apt_packages () {
 
 install_apt_packages() {
     echo "==> Installing build-essential"
-    sudo apt-get install -y build-essential gh
+    sudo apt-get install -y build-essential gh unzip
 }
 
 has_cargo() {
@@ -56,7 +56,7 @@ has_local_config() {
     fi
 }
 
-link_local_file() {
+create_empty_local_config() {
     touch "$HOME/nu/local-config.nu"
 }
 
@@ -82,6 +82,7 @@ has_oh_my_posh() {
 }
 
 install_oh_my_posh() {
+    mkdir -p "$HOME/.local/bin"
     echo "==> Installing oh-my-posh"
     curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/.local/bin
 }
