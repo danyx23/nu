@@ -2,23 +2,23 @@
 set -e
 
 bootstrap() {
+    has_apt_packages || install_apt_packages
     has_cargo || install_cargo
-    has_build_essential || install_build_essential
     cargo install cargo-binstall
-    cargo binstall nushell
-    cargo binstall zellij
-    cargo binstall broot
-    cargo binstall bat
-    cargo binstall zoxide
-    cargo binstall ripgrep
+    cargo binstall nu -y
+    cargo binstall zellij -y
+    cargo binstall broot -y
+    cargo binstall bat -y
+    cargo binstall zoxide -y
+    cargo binstall ripgrep -y
     has_nu_scripts || install_nu_scripts
     has_env_file_link || link_env_file
     has_config_file_link || link_config_file
     has_oh_my_posh || install_oh_my_posh
-    has_local-config || create_empty_local_config
+    has_local_config || create_empty_local_config
 }
 
-has_build_essential () {
+has_apt_packages () {
     if test -x "$(which cc)"
     then
         return 0
@@ -27,9 +27,9 @@ has_build_essential () {
     fi
 }
 
-install_build_essential() {
+install_apt_packages() {
     echo "==> Installing build-essential"
-    sudo apt-get install -y build-essential
+    sudo apt-get install -y build-essential gh
 }
 
 has_cargo() {
@@ -48,7 +48,7 @@ install_cargo() {
     source $HOME/.cargo/env
 }
 
-has_local-config() {
+has_local_config() {
     if [ -f "$HOME/nu/local-config.nu" ]; then
         return 0
     else
