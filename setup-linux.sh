@@ -69,6 +69,7 @@ has_env_file_link() {
 }
 
 link_env_file() {
+    mkdir -p "$HOME/.config/nushell"
     ln -s "$HOME/nu/env.nu" "$HOME/.config/nushell/env.nu"
 }
 
@@ -86,6 +87,7 @@ install_oh_my_posh() {
 }
 
 has_config_file_link() {
+    mkdir -p "$HOME/.config/nushell"
     if [ -f "$HOME/.config/nushell/config.nu" ]; then
         return 0
     else
@@ -96,9 +98,6 @@ has_config_file_link() {
 link_config_file() {
     ln -s "$HOME/nu/config.nu" "$HOME/.config/nushell/config.nu"
 }
-
-
-
 
 has_nu_scripts() {
     if [ -d "$HOME/nu_scripts" ]; then
