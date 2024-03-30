@@ -3,6 +3,7 @@ set -e
 
 bootstrap() {
     has_cargo || install_cargo
+    has_build_essential || install_build_essential
     cargo install cargo-binstall
     cargo binstall nushell
     cargo binstall zellij
@@ -15,6 +16,20 @@ bootstrap() {
     has_config_file_link || link_config_file
     has_oh_my_posh || install_oh_my_posh
     has_local-config || create_empty_local_config
+}
+
+has_build_essential () {
+    if test -x "$(which cc)"
+    then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_build_essential() {
+    echo "==> Installing build-essential"
+    sudo apt-get install -y build-essential
 }
 
 has_cargo() {
