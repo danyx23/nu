@@ -3,7 +3,7 @@ set -e
 
 bootstrap() {
     has_cargo || install_cargo
-    cargo install binstall
+    cargo install cargo-binstall
     cargo binstall nushell
     cargo binstall zellij
     cargo binstall broot
