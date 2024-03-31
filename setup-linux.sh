@@ -12,10 +12,28 @@ bootstrap() {
     cargo binstall zoxide -y
     cargo binstall ripgrep -y
     has_nu_scripts || install_nu_scripts
+    has_owid_nushell || install_owid_nushell
     has_env_file_link || link_env_file
     has_config_file_link || link_config_file
     has_oh_my_posh || install_oh_my_posh
     has_local_config || create_empty_local_config
+    has_carapace_bin || install_carapace_bin
+}
+
+has_carapace_bin() {
+    if test -x "$(which carapace)"
+    then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_carapace_bin() {
+    echo "==> Installing carapace"
+    wget https://github.com/carapace-sh/carapace-bin/releases/download/v1.0.0/carapace-bin_linux_amd64.tar.gz -o carapace.tar.gz
+    tar -xvf carapace.tar.gz carapace
+    mv carapace "$HOME/.local/bin"
 }
 
 has_apt_packages () {
@@ -110,6 +128,18 @@ has_nu_scripts() {
 
 install_nu_scripts() {
     git clone git@github.com:nushell/nu_scripts.git "$HOME/nu_scripts"
+}
+
+has_owid_nushell() {
+    if [ -d "$HOME/owid-nushell" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+install_owid_nushell() {
+    git clone git@github.com:owid/owid-nushell.git "$HOME/owid-nushell"
 }
 
 # Check if any argument was passed
