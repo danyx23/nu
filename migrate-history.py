@@ -1,3 +1,8 @@
+# This migration script is used to convert the history.txt file to a history.sql file that can be imported into the sqlite3 database.
+# It is done in python instead of nushell as on windows the history file can be locked while a nushell shell is active.
+
+# Run this script with `python migrate-history.py <config_dir> <hostname>`
+
 import sys
 from pathlib import Path
 
