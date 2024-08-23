@@ -90,7 +90,7 @@ $env.NU_PLUGIN_DIRS = [
 #     zoxide init nushell | save -f ~/.zoxide.nu
 # }
 
-$env.COLORTERM = truecolor
+$env.COLORTERM = "truecolor"
 
 $env.APP_CONFIG_DIR = (
         if ($nu.os-info.name == 'macos')
@@ -116,4 +116,4 @@ $env.POETRY_VIRTUALENVS_IN_PROJECT = "true"
 
 envtools pathenv add $"($nu.home-path)/.rye/shims/"
 
-$env.SCRIPT_SHELL = /bin/zsh
+$env.SCRIPT_SHELL = "/bin/zsh"

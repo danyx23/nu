@@ -25,7 +25,7 @@ $env.PROMPT_MULTILINE_INDICATOR = (^$"($oh_my_posh_executable)" print secondary 
 $env.PROMPT_COMMAND = { ||
     # hack to set the cursor line to 1 when the user clears the screen
     # this obviously isn't bulletproof, but it's a start
-    let clear = (history | last 1 | get 0.command) == "clear"
+    let clear = if ((history | length) > 0) { (history | last 1 | get 0.command) == "clear" } else { false }
 
     ^$"($oh_my_posh_executable)" print primary $"--config=($env.POSH_THEME)" --shell=nu $"--shell-version=($env.POSH_SHELL_VERSION)" $"--execution-time=(posh_cmd_duration)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=(posh_width)" $"--cleared=($clear)"
 }
