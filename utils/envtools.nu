@@ -33,3 +33,19 @@ export def --env "pathenv save" [
         $pathvar: $newPath
     }
 }
+
+export def nudo [func: closure] {
+    sudo nu --stdin -c $"do (view source $func)"
+}
+
+
+export def nudf [] {
+    const sizes = [Size Used Available]
+
+    ^df -k
+    | detect columns --guess
+    | rename -c {"1K-blocks": Size}
+    | update cells -c $sizes { $in + "KiB" }
+    | update cells -c ["Use%"] { str trim -c "%" | into int }
+    | into filesize ...$sizes
+}
