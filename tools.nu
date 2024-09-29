@@ -21,3 +21,9 @@ export def compare_dirs [
     | select path_parent path_stem path_extension md5 md5_
     | upsert same {|it| $it.md5 == $it.md5_}
 }
+
+export def "movie length" [ filename ] {
+    ffprobe -i $filename -show_entries format=duration -v quiet -of csv="p=0"
+    | into int
+    | into duration --unit sec
+}
