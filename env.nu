@@ -117,3 +117,4 @@ $env.POETRY_VIRTUALENVS_IN_PROJECT = "true"
 envtools pathenv add $"($nu.home-path)/.rye/shims/"
 
 $env.SCRIPT_SHELL = "/bin/zsh"
+$env.TERM = "xterm-256color"
