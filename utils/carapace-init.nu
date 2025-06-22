@@ -1,6 +1,6 @@
 use envtools.nu "pathenv add"
 
-pathenv add $"($nu.home-path)/.config/carapace/bin"
+# pathenv add "/Users/daniel/Library/Application Support/carapace/bin"
 
 def --env get-env [name] { $env | get $name }
 def --env set-env [name, value] { load-env { $name: $value } }
@@ -15,7 +15,7 @@ let carapace_completer = {|spans|
     # put the first word of the expanded alias first in the span
     $spans | skip 1 | prepend ($expanded_alias | split row " " | take 1)
   } else {
-    $spans
+    $spans | skip 1 | prepend ($spans.0)
   })
 
   carapace $spans.0 nushell ...$spans
@@ -26,7 +26,6 @@ mut current = (($env | default {} config).config | default {} completions)
 $current.completions = ($current.completions | default {} external)
 $current.completions.external = ($current.completions.external
 | default true enable
-| default $carapace_completer completer)
+| default { $carapace_completer } completer)
 
 $env.config = $current
-
