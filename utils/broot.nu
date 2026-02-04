@@ -85,7 +85,7 @@ def --env br [
     if $whale_spotting { $args = ($args | append $'--whale-spotting') }
     if $write_default_conf != null { $args = ($args | append $'--write-default-conf=($write_default_conf)') }
 
-    let cmd_file = ([ $nu.temp-path, $"broot-(random chars).tmp" ] | path join)
+    let cmd_file = ([ $nu.temp-dir, $"broot-(random chars).tmp" ] | path join)
     touch $cmd_file
     if ($file == null) {
         ^broot --outcmd $cmd_file $args

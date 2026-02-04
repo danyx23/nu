@@ -64,3 +64,13 @@ source ~/owid-nushell/aliases.nu
 source ~/nu/local-config.nu
 
 source ~/nu_scripts/nu-hooks/nu-hooks/direnv/direnv.nu
+
+overlay use ~/code/nupm/nupm/ --prefix
+
+def disableSleep [] {
+    pmset -a disablesleep 0
+}
+
+def enableSleep [] {
+    pmset -a disablesleep 1
+}

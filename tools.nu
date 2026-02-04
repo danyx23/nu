@@ -27,3 +27,12 @@ export def "movie length" [ filename ] {
     | into int
     | into duration --unit sec
 }
+
+export def "parse ing-diba" [ filename ] {
+    open $filename
+    | decode iso-8859-1
+    | lines
+    | skip 13
+    | str join "\n"
+    | from csv -s ";"
+}

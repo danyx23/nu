@@ -94,19 +94,19 @@ $env.COLORTERM = "truecolor"
 
 $env.APP_CONFIG_DIR = (
         if ($nu.os-info.name == 'macos')
-            { $"($nu.home-path)/Library/Application Support" }
+            { $"($nu.home-dir)/Library/Application Support" }
         else if ($nu.os-info.name == 'windows')
             { $"($env.APPDATA)" }
         else
-            { $"($nu.home-path)/.local/share" }
+            { $"($nu.home-dir)/.local/share" }
     )
 $env.APP_EXEC_DIR = (
         if ($nu.os-info.name == 'macos')
             {[  $"/opt/homebrew/bin"  ]}
         else if ($nu.os-info.name == 'windows')
-            {[  $"($nu.home-path)/bin"  $"($nu.home-path)/.local/bin"]}
+            {[  $"($nu.home-dir)/bin"  $"($nu.home-dir)/.local/bin"]}
         else
-            {[  $"($nu.home-path)/.local/bin"  ]}
+            {[  $"($nu.home-dir)/.local/bin"  ]}
     )
 $env.PIPENV_VENV_IN_PROJECT = true
 
@@ -114,7 +114,7 @@ for $it in $env.APP_EXEC_DIR {envtools pathenv add $it}
 
 $env.POETRY_VIRTUALENVS_IN_PROJECT = "true"
 
-envtools pathenv add $"($nu.home-path)/.rye/shims/"
+envtools pathenv add $"($nu.home-dir)/.rye/shims/"
 
 $env.SCRIPT_SHELL = "/bin/zsh"
 $env.TERM = "xterm-256color"
