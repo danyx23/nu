@@ -70,8 +70,6 @@ source ~/nu/local-config.nu
 
 source ~/nu_scripts/nu-hooks/nu-hooks/direnv/direnv.nu
 
-overlay use ~/code/nupm/nupm/ --prefix
-
 def disableSleep [] {
     pmset -a disablesleep 0
 }
