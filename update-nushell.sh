@@ -36,7 +36,7 @@ run_git_pull "$HOME/nu_scripts"
 
 log "Installing/updating Carapace"
 carapace_version="$(curl -fsSL https://api.github.com/repos/carapace-sh/carapace-bin/releases/latest | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')"
-carapace_url="https://github.com/carapace-sh/carapace-bin/releases/download/v${carapace_version}/carapace-bin_linux_amd64.tar.gz"
+carapace_url="https://github.com/carapace-sh/carapace-bin/releases/download/v${carapace_version}/carapace-bin_${carapace_version}_linux_amd64.tar.gz"
 log "Downloading carapace v${carapace_version}"
 curl -fsSL "$carapace_url" | tar -xz -C "$HOME/.local/bin" carapace
 
