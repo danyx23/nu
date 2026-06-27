@@ -24,7 +24,7 @@ nu_history_format() {
 }
 
 log "Installing/updating Nushell"
-cargo binstall nu
+cargo binstall -y nu
 
 # Capture the pre-update configured history backend before pulling the new config.
 # If this is already sqlite, do not run `history import` later because it appends.
@@ -35,7 +35,10 @@ run_git_pull "$HOME/nu"
 run_git_pull "$HOME/nu_scripts"
 
 log "Installing/updating Carapace"
-cargo binstall carapace
+carapace_version="$(curl -fsSL https://api.github.com/repos/carapace-sh/carapace-bin/releases/latest | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')"
+carapace_url="https://github.com/carapace-sh/carapace-bin/releases/download/v${carapace_version}/carapace-bin_linux_amd64.tar.gz"
+log "Downloading carapace v${carapace_version}"
+curl -fsSL "$carapace_url" | tar -xz -C "$HOME/.local/bin" carapace
 
 run_git_pull "$HOME/owid-nushell"
 
