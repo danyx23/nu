@@ -2,30 +2,31 @@ use envtools.nu "pathenv add"
 
 # pathenv add "/Users/daniel/Library/Application Support/carapace/bin"
 
-def --env get-env [name] { $env | get $name }
-def --env set-env [name, value] { load-env { $name: $value } }
-def --env unset-env [name] { hide-env $name }
+let carapace_completer = {|spans: list<string>|
+  # If the current command is an alias, complete against the first word of its expansion.
+  let expanded_alias = (
+    scope aliases
+    | where name == $spans.0
+    | get -o 0.expansion
+  )
 
-let carapace_completer = {|spans|
-  # if the current command is an alias, get it's expansion
-  let expanded_alias = (scope aliases | where name == $spans.0 | get -o 0 | get -o expansion)
-
-  # overwrite
-  let spans = (if $expanded_alias != null  {
-    # put the first word of the expanded alias first in the span
+  let spans = if $expanded_alias != null {
     $spans | skip 1 | prepend ($expanded_alias | split row " " | take 1)
   } else {
-    $spans | skip 1 | prepend ($spans.0)
-  })
+    $spans
+  }
 
-  carapace $spans.0 nushell ...$spans
-  | from json
+  if (which carapace | is-empty) {
+    []
+  } else {
+    CARAPACE_LENIENT=1 carapace $spans.0 nushell ...$spans | from json
+  }
 }
 
-mut current = (($env | default {} config).config | default {} completions)
-$current.completions = ($current.completions | default {} external)
-$current.completions.external = ($current.completions.external
-| default true enable
-| default { $carapace_completer } completer)
-
-$env.config = $current
+$env.config.completions.external = (
+  $env.config.completions.external | merge {
+    enable: true
+    max_results: 100
+    completer: $carapace_completer
+  }
+)
