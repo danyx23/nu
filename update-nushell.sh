@@ -23,13 +23,16 @@ nu_history_format() {
   nu -l -c '$env.config.history.file_format | into string' 2>/dev/null | tail -n 1 | tr -d '\r' || true
 }
 
-log "Installing/updating Nushell"
-cargo binstall -y nu
-
-# Capture the pre-update configured history backend before pulling the new config.
-# If this is already sqlite, do not run `history import` later because it appends.
+# Capture the pre-update configured history backend before pulling the new config,
+# and before replacing the nu binary (a freshly installed nu can fail to start against
+# a stale plugin registry, which would make detection return nothing).
+# `history import` appends, so it must only ever run on a genuine plaintext -> sqlite
+# switch. Anything other than a definite "plaintext" answer means: do not import.
 pre_update_history_format="$(nu_history_format)"
 log "Current Nushell history format: ${pre_update_history_format:-unknown}"
+
+log "Installing/updating Nushell"
+cargo binstall -y nu
 
 run_git_pull "$HOME/nu"
 run_git_pull "$HOME/nu_scripts"
@@ -85,23 +88,27 @@ run_git_pull "$HOME/owid-nushell"
 post_update_history_format="$(nu_history_format)"
 log "Nushell history format after config update: ${post_update_history_format:-unknown}"
 
-if [[ "$pre_update_history_format" == "sqlite" ]]; then
-  log "History was already sqlite before this update; skipping migration"
+config_dir="$(nu_config_dir)"
+history_txt="$config_dir/history.txt"
+history_marker="$config_dir/.history-migrated"
+
+# Fail safe: import only on a definite plaintext -> sqlite transition, only once ever,
+# and only when there is actually a plaintext file to import.
+if [[ -f "$history_marker" ]]; then
+  log "Plaintext history was already imported (marker $history_marker); skipping migration"
+elif [[ "$pre_update_history_format" != "plaintext" ]]; then
+  log "Pre-update history format was '${pre_update_history_format:-unknown}', not plaintext; skipping migration"
 elif [[ "$post_update_history_format" != "sqlite" ]]; then
   log "History is not configured for sqlite after update; skipping migration"
+elif [[ ! -f "$history_txt" ]]; then
+  log "No plaintext history.txt found at $history_txt; skipping migration"
 else
-  config_dir="$(nu_config_dir)"
-  history_txt="$config_dir/history.txt"
-  history_backup="$config_dir/history.txt.bak.$(date +%Y%m%d%H%M%S)"
-
-  if [[ -f "$history_txt" ]]; then
-    log "Backing up plaintext history to $history_backup"
-    cp "$history_txt" "$history_backup"
-  else
-    log "No plaintext history.txt found at $history_txt; running import anyway in case Nushell can find alternate history"
-  fi
+  history_backup="$history_txt.bak.$(date +%Y%m%d%H%M%S)"
+  log "Backing up plaintext history to $history_backup"
+  cp "$history_txt" "$history_backup"
 
   log "Importing plaintext history into sqlite history"
   nu -l -c 'history import'
-  log "History migration complete"
+  touch "$history_marker"
+  log "History migration complete; marked as done at $history_marker"
 fi
