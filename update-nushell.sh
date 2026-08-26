@@ -107,6 +107,18 @@ generate_oh_my_posh_init() {
   mv "$out.tmp" "$out"
 }
 
+# An old `oh-my-posh init nu` (without --print) dropped a shim into nushell's vendor
+# autoload dir. It is loaded on every startup, is never regenerated, and now fails against
+# current nushell (`$env.CMD_DURATION_MS` is a string, the old shim assigns it to an int).
+# config.nu sources our generated integration, so the vendored copy is pure dead weight.
+remove_stale_vendor_oh_my_posh() {
+  local vendor_shim="$1/vendor/autoload/oh-my-posh.nu"
+  if [[ -f "$vendor_shim" ]]; then
+    log "Removing stale vendored oh-my-posh shim at $vendor_shim"
+    rm -f "$vendor_shim"
+  fi
+}
+
 # Each shell used to mint a fresh session id, leaving thousands of empty cache files behind.
 prune_oh_my_posh_cache() {
   local cache_dir="$HOME/.cache/oh-my-posh"
@@ -121,6 +133,7 @@ prune_oh_my_posh_cache() {
 
 generate_oh_my_posh_init
 prune_oh_my_posh_cache
+remove_stale_vendor_oh_my_posh "$(nu_config_dir)"
 
 post_update_history_format="$(nu_history_format)"
 log "Nushell history format after config update: ${post_update_history_format:-unknown}"
