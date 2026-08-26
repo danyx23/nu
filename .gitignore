@@ -1,3 +1,4 @@
 local-config.nu
 keys.txt
 .DS_Store
+utils/.oh-my-posh.nu
